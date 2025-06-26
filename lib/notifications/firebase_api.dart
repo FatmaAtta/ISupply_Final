@@ -8,24 +8,6 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print('Payload: ${message.data}');
 }
 
-//FCM wont show system notifications in foreground thats why we need to trigger a local notification
-// Future<void> handleForegroundMessage(RemoteMessage message) async {
-//   const androidDetails = AndroidNotificationDetails(
-//     'channel_id',
-//     'channel_name',
-//     importance: Importance.max,
-//     priority: Priority.high,
-//   );
-//
-//   const notificationDetails = NotificationDetails(android: androidDetails);
-//
-//   await FirebaseAPI()._localNotifications.show(
-//         0,
-//         message.notification?.title,
-//         message.notification?.body,
-//         notificationDetails,
-//       );
-// }
 
 class FirebaseAPI {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -36,7 +18,7 @@ class FirebaseAPI {
     await initLocalNotifications();
     final fcmToken = await _firebaseMessaging.getToken();
     print('token: $fcmToken');
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage); //this function needs to be top level functions (not inside a class or another function or lambda function)
     FirebaseMessaging.onMessage.listen((message) {
       _showForegroundNotification(message);
     });
@@ -65,3 +47,24 @@ class FirebaseAPI {
     );
   }
 }
+
+
+
+//FCM wont show system notifications in foreground thats why we need to trigger a local notification
+// Future<void> handleForegroundMessage(RemoteMessage message) async {
+//   const androidDetails = AndroidNotificationDetails(
+//     'channel_id',
+//     'channel_name',
+//     importance: Importance.max,
+//     priority: Priority.high,
+//   );
+//
+//   const notificationDetails = NotificationDetails(android: androidDetails);
+//
+//   await FirebaseAPI()._localNotifications.show(
+//         0,
+//         message.notification?.title,
+//         message.notification?.body,
+//         notificationDetails,
+//       );
+// }
