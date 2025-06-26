@@ -9,8 +9,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  final firebaseAPI = FirebaseAPI();
   await FirebaseAPI().initNotifications();
+
   runApp(const MyApp());
 }
 

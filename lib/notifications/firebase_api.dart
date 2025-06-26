@@ -1,7 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   //the ui of the notification
   print('Title: ${message.notification?.title}');
@@ -9,13 +8,60 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print('Payload: ${message.data}');
 }
 
+//FCM wont show system notifications in foreground thats why we need to trigger a local notification
+// Future<void> handleForegroundMessage(RemoteMessage message) async {
+//   const androidDetails = AndroidNotificationDetails(
+//     'channel_id',
+//     'channel_name',
+//     importance: Importance.max,
+//     priority: Priority.high,
+//   );
+//
+//   const notificationDetails = NotificationDetails(android: androidDetails);
+//
+//   await FirebaseAPI()._localNotifications.show(
+//         0,
+//         message.notification?.title,
+//         message.notification?.body,
+//         notificationDetails,
+//       );
+// }
 
-class FirebaseAPI{
+class FirebaseAPI {
   final _firebaseMessaging = FirebaseMessaging.instance;
+  final _localNotifications = FlutterLocalNotificationsPlugin();
+
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
+    await initLocalNotifications();
     final fcmToken = await _firebaseMessaging.getToken();
     print('token: $fcmToken');
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+    FirebaseMessaging.onMessage.listen((message) {
+      _showForegroundNotification(message);
+    });
+  }
+
+  Future<void> initLocalNotifications() async {
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const settings = InitializationSettings(android: android);
+    await _localNotifications.initialize(settings);
+  }
+  Future<void> _showForegroundNotification(RemoteMessage message) async {
+    const androidDetails = AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const notificationDetails = NotificationDetails(android: androidDetails);
+
+    await _localNotifications.show(
+      0,
+      message.notification?.title,
+      message.notification?.body,
+      notificationDetails,
+    );
   }
 }
