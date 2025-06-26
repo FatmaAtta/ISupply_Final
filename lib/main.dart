@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:isupply_final/firebase_options.dart';
+import 'package:isupply_final/notifications/firebase_api.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  //need to ensure flutter is initialized first
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await FirebaseAPI().initNotifications();
   runApp(const MyApp());
 }
 
