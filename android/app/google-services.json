@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "461371314209",
+    "project_id": "isupply-final",
+    "storage_bucket": "isupply-final.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461371314209:android:b856b8494df40434991360",
+        "android_client_info": {
+          "package_name": "com.example.isupply_final"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcWdc1St1WitmtwMG3lbWNWI6E6BQ2t5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
