@@ -41,6 +41,12 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
                     title: "Order Status Updated",
                     body: `Order ${event.params.orderID} ${orderStatuses[after.status]} `,
                 },
+                android:{
+                    notification: {
+                        priority: "high",
+                        channelId: "channel_id", // Flutter's default
+                    },
+                },
             });
             logger.log(`Notification sent to ${buyerID}`);
         } catch(error){

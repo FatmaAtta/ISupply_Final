@@ -28,6 +28,17 @@ class FirebaseAPI {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const settings = InitializationSettings(android: android);
     await _localNotifications.initialize(settings);
+
+    const channel = AndroidNotificationChannel(
+      'channel_id',
+      'High Importance Notifications',
+      description: 'This channel is used for order updates',
+      importance: Importance.high,
+    );
+
+    await _localNotifications
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+
   }
   Future<void> _showForegroundNotification(RemoteMessage message) async {
     const androidDetails = AndroidNotificationDetails(
