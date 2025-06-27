@@ -47,24 +47,3 @@ class FirebaseAPI {
     );
   }
 }
-
-
-
-//FCM wont show system notifications in foreground thats why we need to trigger a local notification
-// Future<void> handleForegroundMessage(RemoteMessage message) async {
-//   const androidDetails = AndroidNotificationDetails(
-//     'channel_id',
-//     'channel_name',
-//     importance: Importance.max,
-//     priority: Priority.high,
-//   );
-//
-//   const notificationDetails = NotificationDetails(android: androidDetails);
-//
-//   await FirebaseAPI()._localNotifications.show(
-//         0,
-//         message.notification?.title,
-//         message.notification?.body,
-//         notificationDetails,
-//       );
-// }
