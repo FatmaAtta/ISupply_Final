@@ -37,15 +37,20 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
             }
             await getMessaging().send({
                 token: fcmToken,
+                  data: {
+                    title: "Order Status Updated",
+                    body: `Order ${event.params.orderID} ${orderStatuses[after.status]}`,
+                    type: "order_update",
+                  },
                 notification: {
                     title: "Order Status Updated",
                     body: `Order ${event.params.orderID} ${orderStatuses[after.status]} `,
                 },
                 android:{
-                    notification: {
-                        priority: "high",
-                        channelId: "channel_id", // Flutter's default
-                    },
+//                    notification: {
+                    priority: "high",
+//                    channelId: "channel_id",
+//                    },
                 },
             });
             logger.log(`Notification sent to ${buyerID}`);

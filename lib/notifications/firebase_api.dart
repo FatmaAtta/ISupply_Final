@@ -3,9 +3,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   //the ui of the notification
-  print('Title: ${message.notification?.title}');
-  print('Body: ${message.notification?.body}');
-  print('Payload: ${message.data}');
+  final title = message.notification?.title ?? message.data['title'];
+  final body = message.notification?.body ?? message.data['body'];
+  print('Title: $title');
+  print('Body: $body');
+  // print('Payload: ${message.data}');
 }
 
 
@@ -20,7 +22,9 @@ class FirebaseAPI {
     print('token: $fcmToken');
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage); //this function needs to be top level functions (not inside a class or another function or lambda function)
     FirebaseMessaging.onMessage.listen((message) {
-      _showForegroundNotification(message);
+      final title = message.data['title'];
+      final body = message.data['body'];
+      _showForegroundNotification(title, body);
     });
   }
 
@@ -40,7 +44,7 @@ class FirebaseAPI {
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
 
   }
-  Future<void> _showForegroundNotification(RemoteMessage message) async {
+  Future<void> _showForegroundNotification(String? title, String? body) async {
     const androidDetails = AndroidNotificationDetails(
       'channel_id',
       'channel_name',
@@ -51,9 +55,9 @@ class FirebaseAPI {
     const notificationDetails = NotificationDetails(android: androidDetails);
 
     await _localNotifications.show(
-      0,
-      message.notification?.title,
-      message.notification?.body,
+      0, //notification id
+      title,
+      body,
       notificationDetails,
     );
   }
