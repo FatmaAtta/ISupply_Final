@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:isupply_final/firebase_options.dart';
 import 'package:isupply_final/notifications/firebase_api.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:isupply_final/order_list.dart';
 
 void main() async {
   //need to ensure flutter is initialized first
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: OrderList(),
     );
   }
 }
@@ -63,19 +64,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            IconButton(onPressed: _decrementCounter, icon: Icon(Icons.remove))
+        child: Stepper(
+          type: StepperType.horizontal,
+          currentStep: 2,
+          steps: const [
+            Step(title: Text('Pending'), content: SizedBox.shrink()),
+            Step(title: Text('Confirmed'), content: SizedBox.shrink()),
+            Step(title: Text('On its Way'), content: SizedBox.shrink()),
+            Step(title: Text('Delivered'), content: SizedBox.shrink()),
           ],
-        ),
+          controlsBuilder: (context, _) => SizedBox.shrink(), // Hide Next/Back buttons
+        )
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,

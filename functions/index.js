@@ -41,6 +41,7 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
                     title: "Order Status Updated",
                     body: `Order ${event.params.orderID} ${orderStatuses[after.status]}`,
                     type: "order_update",
+                    orderID: event.params.orderID,
                   },
                 notification: {
                     title: "Order Status Updated",

@@ -1,6 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+const BigTextStyleInformation bigTextStyle = BigTextStyleInformation(
+  'This is a long message that will be shown when the notification is expanded. You can add more lines here for context, instructions, or descriptions.',
+  contentTitle: 'Order Status Update',
+  summaryText: 'Order #123 has been delivered',
+);
+
 Future<void> handleBackgroundMessage(RemoteMessage message) async {
   //the ui of the notification
   final title = message.notification?.title ?? message.data['title'];
@@ -50,6 +56,9 @@ class FirebaseAPI {
       'channel_name',
       importance: Importance.max,
       priority: Priority.high,
+      icon: 'i',
+      largeIcon: DrawableResourceAndroidBitmap('i'),
+      styleInformation: bigTextStyle,
     );
 
     const notificationDetails = NotificationDetails(android: androidDetails);
