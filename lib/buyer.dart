@@ -5,13 +5,18 @@ import 'package:isupply_final/firestore_api.dart';
 
 class BuyerScreen extends StatelessWidget {
   final String buyerID;
-
+  Map<int, String> status ={
+    0: "Pending",
+    1: "Confirmed",
+    2: "Shipping",
+    3: "Delivered",
+  };
   BuyerScreen({required this.buyerID});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Buyer Orders")),
+      appBar: AppBar(title: Text("${buyerID}'s Orders")),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Orders')
@@ -27,8 +32,18 @@ class BuyerScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final order = orders[index].data() as Map<String, dynamic>;
               return ListTile(
-                title: Text("Order ${orders[index].id}"),
-                subtitle: Text("Status: ${order['status']}"),
+                title: Text("${orders[index].id}"),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Status: ${status[order['status']]}"),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Image.asset('assets/status${order['status']}.png'),
+                    )
+                  ],
+                )
+
               );
             },
           );
@@ -38,52 +53,64 @@ class BuyerScreen extends StatelessWidget {
   }
 }
 
+                // trailing: buildOrderProgress(order['status']),
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// final firestoreData = FirestoreData();
-// List<Map<String, dynamic>> buyerOrders = [];
-// void loadBuyerOrders() async {
-//   buyerOrders = await firestoreData.getBuyerOrders();
+// Widget buildOrderProgress(int status) {
+//   final stages = ["Pending", "Confirmed", "On the Way", "Delivered"];
+//   return Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//     children: List.generate(4, (index) {
+//       bool isCompleted = index <= status;
+//       return Column(
+//         children: [
+//           Container(
+//             width: 24,
+//             height: 24,
+//             decoration: BoxDecoration(
+//               color: isCompleted ? Colors.green : Colors.grey[300],
+//               shape: BoxShape.circle,
+//             ),
+//             child: isCompleted
+//                 ? Icon(Icons.check, size: 16, color: Colors.white)
+//                 : null,
+//           ),
+//           SizedBox(height: 4),
+//           Text(stages[index], style: TextStyle(fontSize: 10)),
+//         ],
+//       );
+//     }),
+//   );
+//
 // }
-//
-// class BuyerOrderList extends StatefulWidget{
-//
-//   @override
-//   State<BuyerOrderList> createState() => _BuyerState();
-// }
-//
-// class _BuyerState extends State<BuyerOrderList>{
-//   List<Map<String, dynamic>> buyerOrders = [];
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadBuyerOrders();
-//   }
-//   void loadBuyerOrders() async {
-//     final orders = await firestoreData.getBuyerOrders();
-//     setState(() {
-//       buyerOrders = orders;
-//     });
-//   }
-//   @override
-//   Widget build(BuildContext context){
-//     return Text("HELLO");
-//   }
+
+// Widget buildOrderProgress(int status) {
+//   final stages = ["Pending", "Confirmed", "On the Way", "Delivered"];
+//   return Row(
+//     children: List.generate(stages.length * 2 - 1, (index) {
+//       if (index % 2 == 0) {
+//         int step = index ~/ 2;
+//         bool isComplete = step <= status;
+//         return Column(
+//           children: [
+//             Icon(
+//               isComplete ? Icons.check_circle : Icons.radio_button_unchecked,
+//               color: isComplete ? Colors.green : Colors.grey,
+//             ),
+//             SizedBox(height: 4),
+//             Text(
+//               stages[step],
+//               style: TextStyle(fontSize: 12),
+//             )
+//           ],
+//         );
+//       } else {
+//         return Expanded(
+//           child: Divider(
+//             color: status >= (index ~/ 2) ? Colors.green : Colors.grey,
+//             thickness: 2,
+//           ),
+//         );
+//       }
+//     }),
+//   );
 // }
