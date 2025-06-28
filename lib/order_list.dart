@@ -13,8 +13,8 @@ class OrderList extends StatefulWidget{
 class _OrderListState extends State<OrderList>{
   int _currentIndex =0;
   final List<Widget> _screens = [
-    BuyerOrderList(),
-    SellerOrderList(),
+    BuyerScreen(buyerID: 'Buyer1',),
+    SellerScreen(sellerID: 'Seller1',),
   ];
 
   @override
@@ -51,3 +51,5 @@ class _OrderListState extends State<OrderList>{
     );
   }
 }
+
+

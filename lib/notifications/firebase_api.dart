@@ -58,9 +58,9 @@ class FirebaseAPI {
       priority: Priority.high,
       icon: 'i',
       largeIcon: DrawableResourceAndroidBitmap('i'),
-      styleInformation: bigTextStyle,
     );
 
+      // styleInformation: bigTextStyle,
     const notificationDetails = NotificationDetails(android: androidDetails);
 
     await _localNotifications.show(
