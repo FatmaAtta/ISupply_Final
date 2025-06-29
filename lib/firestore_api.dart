@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreData {
   List<Map<String, dynamic>> _seller1 = [];
   List<Map<String, dynamic>> _buyer1 = [];
+  String sellerName = "";
 
   Future<Map<String, dynamic>?> fetchOrderDetails(String orderID) async{
     final doc = await FirebaseFirestore.instance.collection('Orders').doc(orderID).get();
@@ -38,5 +39,24 @@ class FirestoreData {
   Future<List<Map<String, dynamic>>> getBuyerOrders() async {
     if (_buyer1.isEmpty) await loadOrders();
     return _buyer1;
+  }
+
+  Future<String> fetchSellerName(String sellerID) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Sellers')
+        .where('sellerID', isEqualTo: sellerID)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final data = querySnapshot.docs.first.data();
+      return data['name'] ?? 'Unknown Seller';
+    } else {
+      return 'Seller Not Found';
+    }
+  }
+
+  Future<String> getSellerName(String sellerID) async {
+    return await fetchSellerName(sellerID);
   }
 }

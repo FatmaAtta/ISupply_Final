@@ -30,7 +30,8 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
             const buyerDoc = await db.collection("Buyers").doc(buyerID).get();
             const buyerData = buyerDoc.data();
             const fcmToken = buyerData.fcmToken;
-
+            let sellerName = await db.collection("Sellers").doc(after.sellerID).get();
+            sellerName = sellerName.exists ? sellerName.data().name : "Unknown Seller";
             if(!fcmToken){
                 logger.warn(`${buyerID} has no FCM Token`);
                 return;
@@ -38,10 +39,13 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
             await getMessaging().send({
                 token: fcmToken,
                   data: {
-                    title: "Order Status Updated",
-                    body: `Order ${event.params.orderID} ${orderStatuses[after.status]}`,
+                    title: `Order Status Update with ${sellerName}`,
+                    body: `${event.params.orderID} status changed from ${orderStatuses[before.status]} to ${orderStatuses[after.status]}`,
                     type: "order_update",
                     orderID: event.params.orderID,
+                    before: String(before.status),
+                    after: String(after.status),
+                    sellerID: before.sellerID,
                   },
                 notification: {
                     title: "Order Status Updated",

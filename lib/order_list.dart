@@ -10,13 +10,34 @@ class OrderList extends StatefulWidget{
   State<OrderList> createState() => _OrderListState();
 }
 
+class OrderListController {
+  static late _OrderListState _state;
+
+  static void setInstance(_OrderListState state) {
+    _state = state;
+  }
+
+  static void navigateToBuyer() {
+    _state.navigateToBuyer();
+  }
+}
+
 class _OrderListState extends State<OrderList>{
   int _currentIndex =0;
   final List<Widget> _screens = [
     BuyerScreen(buyerID: 'Buyer1',),
     SellerScreen(sellerID: 'Seller1',),
   ];
-
+  @override
+  void initState() {
+    super.initState();
+    OrderListController.setInstance(this);
+  }
+  void navigateToBuyer() {
+    setState(() {
+      _currentIndex = 0;
+    });
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
