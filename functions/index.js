@@ -6,12 +6,17 @@ const {getFirestore} = require("firebase-admin/firestore");
 const {getMessaging} = require("firebase-admin/messaging");
 
 const orderStatuses = {
-    0: "Is Pending...",
-    1: "Has Been Confirmed",
-    2: "Is On Its Way",
-    3: "Has Been Delivered",
+    0: "Is Pending...^-^",
+    1: "Has Been Confirmed :D",
+    2: "Is On Its Way ^u^",
+    3: "Has Been Delivered ✅",
 }
-
+const statusImgs = {
+    0: "https://firebasestorage.googleapis.com/v0/b/isupply-final.firebasestorage.app/o/status0.png?alt=media&token=987ce592-d15e-4cd1-b854-7f463d506cd6",
+    1: "https://firebasestorage.googleapis.com/v0/b/isupply-final.firebasestorage.app/o/status1.png?alt=media&token=b8bd311b-cb6e-4c89-88c6-eee813eb851c",
+    2: "https://firebasestorage.googleapis.com/v0/b/isupply-final.firebasestorage.app/o/status2.png?alt=media&token=cb5d5481-9bcd-4017-bb4a-521cbe895ca7",
+    3: "https://firebasestorage.googleapis.com/v0/b/isupply-final.firebasestorage.app/o/status3.png?alt=media&token=8bab38bc-c6e7-42b5-af7e-1348d8459857",
+}
 
 initializeApp();
 setGlobalOptions({ region: "europe-west1", maxInstances: 10 });
@@ -40,7 +45,8 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
                 token: fcmToken,
                   data: {
                     title: `Order Status Update with ${sellerName}`,
-                    body: `${event.params.orderID} status changed from ${orderStatuses[before.status]} to ${orderStatuses[after.status]}`,
+                    body: `${event.params.orderID} ${orderStatuses[after.status]}`,
+//                    body: `${event.params.orderID} status changed from ${orderStatuses[before.status]} to ${orderStatuses[after.status]}`,
                     type: "order_update",
                     orderID: event.params.orderID,
                     before: String(before.status),
@@ -48,8 +54,10 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
                     sellerID: before.sellerID,
                   },
                 notification: {
-                    title: "Order Status Updated",
-                    body: `Order ${event.params.orderID} ${orderStatuses[after.status]} `,
+                    title: `Order Status Update with ${sellerName}`,
+                    body: `${event.params.orderID} ${orderStatuses[after.status]}`,
+//                    body: `${event.params.orderID} status changed from ${orderStatuses[before.status]} to ${orderStatuses[after.status]}`,
+                    image: statusImgs[after.status],
                 },
                 android:{
 //                    notification: {
