@@ -9,27 +9,6 @@ import 'package:http/http.dart' as http;
 
 final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
-Map<int, String> status = {
-  0: "Pending",
-  1: "Confirmed",
-  2: "Shipping",
-  3: "Delivered",
-};
-
-Map<int, String> orderStatuses = {
-  0: "Is Pending...",
-  1: "Has Been Confirmed",
-  2: "Is On Its Way",
-  3: "Has Been Delivered",
-};
-
-Map<int, String> progressLineImg = {
-  0: 'status0',
-  1: 'status1',
-  2: 'status2',
-  3: 'status3',
-};
-
 Map<int, String> statusImgs = {
   0: "https://firebasestorage.googleapis.com/v0/b/isupply-final.firebasestorage.app/o/status0.png?alt=media&token=987ce592-d15e-4cd1-b854-7f463d506cd6",
   1: "https://firebasestorage.googleapis.com/v0/b/isupply-final.firebasestorage.app/o/status1.png?alt=media&token=b8bd311b-cb6e-4c89-88c6-eee813eb851c",
@@ -42,7 +21,6 @@ Future<void> _showCustomStyledNotification(RemoteMessage message) async {
   final title = message.notification?.title ?? message.data['title'] ?? 'Order Status Update';
   final body = message.notification?.body ?? message.data['body'] ?? '';
 
-  // final style = await notificationBigPic(message);
   final imageUrl = message.notification?.android?.imageUrl??statusImgs[after];
 
   final bigPictureStyle = BigPictureStyleInformation(

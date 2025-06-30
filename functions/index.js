@@ -46,7 +46,6 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
                   data: {
                     title: `Order Status Update with ${sellerName}`,
                     body: `${event.params.orderID} ${orderStatuses[after.status]}`,
-//                    body: `${event.params.orderID} status changed from ${orderStatuses[before.status]} to ${orderStatuses[after.status]}`,
                     type: "order_update",
                     orderID: event.params.orderID,
                     before: String(before.status),
@@ -56,14 +55,10 @@ exports.notifyUserOnOrderUpdate = onDocumentUpdated("Orders/{orderID}", async (e
                 notification: {
                     title: `Order Status Update with ${sellerName}`,
                     body: `${event.params.orderID} ${orderStatuses[after.status]}`,
-//                    body: `${event.params.orderID} status changed from ${orderStatuses[before.status]} to ${orderStatuses[after.status]}`,
                     image: statusImgs[after.status],
                 },
                 android:{
-//                    notification: {
                     priority: "high",
-//                    channelId: "channel_id",
-//                    },
                 },
             });
             logger.log(`Notification sent to ${buyerID}`);
