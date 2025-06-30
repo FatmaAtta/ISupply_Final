@@ -66,6 +66,7 @@ Future<void> _showCustomStyledNotification(RemoteMessage message) async {
     message.data['title'],
     message.data['body'],
     notificationDetails,
+    payload: 'navigate_to_buyer',
   );
 }
 
@@ -110,7 +111,15 @@ class FirebaseAPI {
   Future<void> initLocalNotifications() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const settings = InitializationSettings(android: android);
-    await _localNotifications.initialize(settings);
+    await _localNotifications.initialize(
+      settings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        final payload = response.payload;
+        if (payload == 'navigate_to_buyer') {
+          OrderListController.navigateToBuyer();
+        }
+      },
+    );
 
     const channel = AndroidNotificationChannel(
       'channel_id',
